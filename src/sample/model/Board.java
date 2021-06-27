@@ -14,7 +14,8 @@ public class Board extends GridPane {
     public Board() {
     }
 
-    public static void createBoard(Board board) {
+    public static Board createBoard() {
+        Board board = new Board();
         Color color;
         for (int column = 0; column < boardHeight; ++column) {
 
@@ -41,6 +42,7 @@ public class Board extends GridPane {
             rowConstraints.setPercentHeight(100/boardHeight);
             board.getRowConstraints().add(rowConstraints);
         }
+        return board;
     }
 
 

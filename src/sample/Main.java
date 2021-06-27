@@ -18,10 +18,8 @@ public class Main extends Application {
 
     @Override
     public void start(Stage primaryStage) throws Exception {
-        Board board = new Board();
-        Board.createBoard(board);
 
-        Scene scene = new Scene(board, 600, 600);
+        Scene scene = new Scene(Board.createBoard(), 600, 600);
         primaryStage.setTitle("Wolf and sheep game");
         primaryStage.setScene(scene);
         primaryStage.show();
