@@ -8,8 +8,20 @@ import javafx.scene.paint.Color;
 
 public class BoardSquare extends Region {
     private Color color;
+    private int column;
+    private int row;
 
-    public BoardSquare(Color color) {
+    public int getColumn() {
+        return column;
+    }
+
+    public int getRow() {
+        return row;
+    }
+
+    public BoardSquare(int column, int row, Color color) {
+        this.column = column;
+        this.row = row;
         this.color = color;
         BackgroundFill fill = new BackgroundFill(color, CornerRadii.EMPTY, new Insets(1));
         Background background = new Background(fill);

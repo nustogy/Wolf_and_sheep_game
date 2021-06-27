@@ -16,7 +16,9 @@ public class Board extends GridPane {
 
     public static Board createBoard() {
         Board board = new Board();
+        BoardSquare square;
         Color color;
+        Pawn[] pawns = Pawn.getStartingPawns();
         for (int column = 0; column < boardHeight; ++column) {
 
             for (int row = 0; row < boardWidth; ++row) {
@@ -26,8 +28,9 @@ public class Board extends GridPane {
                     color = Color.BLACK;
 
 
-                BoardSquare square = new BoardSquare(color);
-                board.add(square, column, row);
+                square = new BoardSquare(column, row, color);
+              Pawn.placePawnsInTheBoard(pawns, square, board);
+
             }
         }
 
