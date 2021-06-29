@@ -6,8 +6,8 @@ import javafx.scene.shape.Circle;
 
 public class Pawn extends Circle {
 
-    private int col;
-    private int row;
+    protected int col;
+    protected int row;
 
 
     Pawn(int col, int row) {
@@ -33,7 +33,7 @@ public class Pawn extends Circle {
 
     public static Pawn[] getStartingPawns() {
         Pawn[] pawns = {
-                new WolfPawn(4, 1),
+                new WolfPawn(7, 0),
                 new SheepPawn(0, 7),
                 new SheepPawn(2, 7),
                 new SheepPawn(4, 7),
@@ -82,20 +82,26 @@ public class Pawn extends Circle {
 
                 if (!square.hasPawn() && board.selectedFieldWithPawn != null) {
                     Pawn movingPawn = (Pawn) board.selectedFieldWithPawn.getChildren().get(1);
-                    board.selectedFieldWithPawn.getChildren().remove(1);
-                   BoardSquare leavingSquare = (BoardSquare) board.selectedFieldWithPawn.getChildren().get(0);
-                   leavingSquare.blacken();
-                   field.getChildren().add(movingPawn);
-                   square.setPawn(movingPawn);
-                   leavingSquare.setPawn(null);
-                   board.selectedFieldWithPawn = null;
-
+                    if(movingPawn.isMoveValid((BoardSquare) field.getChildren().get(0))) {
+                        board.selectedFieldWithPawn.getChildren().remove(1);
+                        BoardSquare leavingSquare = (BoardSquare) board.selectedFieldWithPawn.getChildren().get(0);
+                        leavingSquare.blacken();
+                        field.getChildren().add(movingPawn);
+                        square.setPawn(movingPawn);
+                        leavingSquare.setPawn(null);
+                        movingPawn.setCol(square.getColumn());
+                        movingPawn.setRow(square.getRow());
+                        board.selectedFieldWithPawn = null;
+                    }
                 }
             });
         }
     }
+        public boolean isMoveValid(BoardSquare square) {
+            return square.getRow() == row - 1 && square.getColumn() == col + 1
+                   || square.getRow() == row - 1 && square.getColumn() == col - 1;
 
-//    public void movePawn( BoardSquare destinationSquare)
+        }
 
 }
 

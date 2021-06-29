@@ -1,13 +1,10 @@
 package sample.model;
 
 import javafx.geometry.Insets;
-import javafx.scene.layout.Background;
-import javafx.scene.layout.BackgroundFill;
-import javafx.scene.layout.CornerRadii;
-import javafx.scene.layout.Region;
+import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 
-public class BoardSquare extends Region {
+public class BoardSquare extends StackPane {
     private Color color;
     private int column;
     private int row;

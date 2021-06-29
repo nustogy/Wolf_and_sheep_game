@@ -8,5 +8,10 @@ public class WolfPawn extends Pawn{
         super(col, row);
     }
 
-
+    @Override
+    public boolean isMoveValid(BoardSquare square) {
+        return super.isMoveValid(square)
+                || square.getRow() == row + 1 && square.getColumn() == col + 1
+                || square.getRow() == row + 1 && square.getColumn() == col - 1;
+    }
 }

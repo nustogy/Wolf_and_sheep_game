@@ -7,4 +7,10 @@ public class SheepPawn extends Pawn{
     SheepPawn(int col, int row) {
         super(col, row);
     }
+
+    @Override
+    public boolean isMoveValid(BoardSquare square) {
+        return super.isMoveValid(square);
+
+    }
 }
