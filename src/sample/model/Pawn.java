@@ -9,6 +9,7 @@ public class Pawn extends Circle {
     private int col;
     private int row;
 
+
     Pawn(int col, int row) {
         this.col = col;
         this.row = row;
@@ -55,22 +56,46 @@ public class Pawn extends Circle {
 
 
     static void placePawnsInTheBoard(Pawn[] pawns, BoardSquare square, Board board) {
-        StackPane field;
+        StackPane field = new StackPane();
 
-        board.add(square, square.getColumn(), square.getRow());
+
+        field.getChildren().add(square);
+        board.add(field, square.getColumn(), square.getRow());
 
         for (int i = 0; i < pawns.length; i++) {
             if (isPawnPlaced(pawns[i], square)) {
-                field = new StackPane();
-                field.getChildren().addAll(square, pawns[i]);
-                board.add(field, square.getColumn(), square.getRow());
+                Pawn pawn = pawns[i];
+                square.setPawn(pawns[i]);
+                field.getChildren().add(pawns[i]);
                 break;
             }
-
         }
 
+        if(square.getColor() == Color.BLACK) {
 
+            field.setOnMouseClicked(e -> {
+                // TODO: 29.06.2021 pawn change during move
+                if (square.hasPawn() && board.selectedFieldWithPawn == null) {
+                    square.highlight();
+                    board.selectedFieldWithPawn = field;
+                }
+
+                if (!square.hasPawn() && board.selectedFieldWithPawn != null) {
+                    Pawn movingPawn = (Pawn) board.selectedFieldWithPawn.getChildren().get(1);
+                    board.selectedFieldWithPawn.getChildren().remove(1);
+                   BoardSquare leavingSquare = (BoardSquare) board.selectedFieldWithPawn.getChildren().get(0);
+                   leavingSquare.blacken();
+                   field.getChildren().add(movingPawn);
+                   square.setPawn(movingPawn);
+                   leavingSquare.setPawn(null);
+                   board.selectedFieldWithPawn = null;
+
+                }
+            });
+        }
     }
+
+//    public void movePawn( BoardSquare destinationSquare)
 
 }
 
