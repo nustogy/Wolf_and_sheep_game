@@ -75,16 +75,13 @@ public class Pawn extends Circle {
 
             field.setOnMouseClicked(e -> {
                 // TODO: 29.06.2021 pawn change during move
-                //first click
                 Class currentPawnClassTurn = move.isSheepMove() ? SheepPawn.class : WolfPawn.class;
-
                 if (square.hasPawn(currentPawnClassTurn) && board.selectedFieldWithPawn == null) {
+                    //first click
                     square.highlight();
                     board.selectedFieldWithPawn = field;
-                }
-
-                //second click
-                if (!square.hasPawn() && board.selectedFieldWithPawn != null) {
+                } else if (!square.hasPawn() && board.selectedFieldWithPawn != null) {
+                    //second click
                     Pawn movingPawn = (Pawn) board.selectedFieldWithPawn.getChildren().get(1);
                     if (movingPawn.isMoveValid((BoardSquare) field.getChildren().get(0))) {
                         //leaving square methods
@@ -102,8 +99,12 @@ public class Pawn extends Circle {
                         //board management
                         board.selectedFieldWithPawn = null;
                         move.changeMove();
-
                     }
+                } else if (square.hasPawn() && board.selectedFieldWithPawn != null &&
+                        board.selectedFieldWithPawn.getChildren().get(0).equals(square)) {
+                    // pawn change
+                    square.blacken();
+                    board.selectedFieldWithPawn = null;
                 }
             });
         }
