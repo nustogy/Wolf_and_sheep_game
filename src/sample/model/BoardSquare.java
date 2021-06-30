@@ -52,6 +52,10 @@ public class BoardSquare extends StackPane {
         this.pawn = pawn;
     }
 
+    public boolean hasPawn(Class PawnClass) {
+        return PawnClass.isInstance(pawn);
+    }
+
     public boolean hasPawn() {
         return this.pawn != null;
     }

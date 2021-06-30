@@ -55,7 +55,7 @@ public class Pawn extends Circle {
     }
 
 
-    static void placePawnsInTheBoard(Pawn[] pawns, BoardSquare square, Board board) {
+    static void placePawnsInTheBoard(Pawn[] pawns, BoardSquare square, Board board, Move move) {
         StackPane field = new StackPane();
 
 
@@ -71,37 +71,49 @@ public class Pawn extends Circle {
             }
         }
 
-        if(square.getColor() == Color.BLACK) {
+        if (square.getColor() == Color.BLACK) {
 
             field.setOnMouseClicked(e -> {
                 // TODO: 29.06.2021 pawn change during move
-                if (square.hasPawn() && board.selectedFieldWithPawn == null) {
+                //first click
+                Class currentPawnClassTurn = move.isSheepMove() ? SheepPawn.class : WolfPawn.class;
+
+                if (square.hasPawn(currentPawnClassTurn) && board.selectedFieldWithPawn == null) {
                     square.highlight();
                     board.selectedFieldWithPawn = field;
                 }
 
+                //second click
                 if (!square.hasPawn() && board.selectedFieldWithPawn != null) {
                     Pawn movingPawn = (Pawn) board.selectedFieldWithPawn.getChildren().get(1);
-                    if(movingPawn.isMoveValid((BoardSquare) field.getChildren().get(0))) {
+                    if (movingPawn.isMoveValid((BoardSquare) field.getChildren().get(0))) {
+                        //leaving square methods
                         board.selectedFieldWithPawn.getChildren().remove(1);
                         BoardSquare leavingSquare = (BoardSquare) board.selectedFieldWithPawn.getChildren().get(0);
                         leavingSquare.blacken();
+                        leavingSquare.setPawn(null);
+
+                        //arriving square methods
                         field.getChildren().add(movingPawn);
                         square.setPawn(movingPawn);
-                        leavingSquare.setPawn(null);
                         movingPawn.setCol(square.getColumn());
                         movingPawn.setRow(square.getRow());
+
+                        //board management
                         board.selectedFieldWithPawn = null;
+                        move.changeMove();
+
                     }
                 }
             });
         }
     }
-        public boolean isMoveValid(BoardSquare square) {
-            return square.getRow() == row - 1 && square.getColumn() == col + 1
-                   || square.getRow() == row - 1 && square.getColumn() == col - 1;
 
-        }
+    public boolean isMoveValid(BoardSquare square) {
+        return square.getRow() == row - 1 && square.getColumn() == col + 1
+                || square.getRow() == row - 1 && square.getColumn() == col - 1;
+
+    }
 
 }
 

@@ -16,7 +16,7 @@ public class Board extends GridPane {
     public Board() {
     }
 
-    public static Board createBoard() {
+    public static Board createBoard(Move move) {
         Board board = new Board();
         BoardSquare square;
 
@@ -33,7 +33,7 @@ public class Board extends GridPane {
 
 
                 square = new BoardSquare(column, row, color);
-             Pawn.placePawnsInTheBoard(pawns, square, board);
+             Pawn.placePawnsInTheBoard(pawns, square, board, move);
 
 
             }
@@ -41,13 +41,13 @@ public class Board extends GridPane {
 
         for (int i = 0; i < boardWidth; i++) {
             ColumnConstraints columnConstraints = new ColumnConstraints();
-            columnConstraints.setPercentWidth(100/boardWidth);
+            columnConstraints.setPercentWidth(90/boardWidth);
             board.getColumnConstraints().add(columnConstraints);
                     }
 
         for (int i = 0; i < boardHeight; i++) {
             RowConstraints rowConstraints = new RowConstraints();
-            rowConstraints.setPercentHeight(100/boardHeight);
+            rowConstraints.setPercentHeight(90/boardHeight);
             board.getRowConstraints().add(rowConstraints);
         }
         return board;
