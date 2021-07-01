@@ -4,6 +4,10 @@ import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 
+import java.util.function.Consumer;
+import java.util.function.Function;
+import java.util.function.IntConsumer;
+
 public class Pawn extends Circle {
 
     protected int col;
@@ -55,7 +59,7 @@ public class Pawn extends Circle {
     }
 
 
-    static void placePawnsInTheBoard(Pawn[] pawns, BoardSquare square, Board board, Move move) {
+    static void placePawnsInTheBoard(Pawn[] pawns, BoardSquare square, Board board, Move move, Consumer<String> onGameEnd) {
         StackPane field = new StackPane();
 
 
@@ -74,8 +78,8 @@ public class Pawn extends Circle {
         if (square.getColor() == Color.BLACK) {
 
             field.setOnMouseClicked(e -> {
-                // TODO: 29.06.2021 pawn change during move
                 Class currentPawnClassTurn = move.isSheepMove() ? SheepPawn.class : WolfPawn.class;
+
                 if (square.hasPawn(currentPawnClassTurn) && board.selectedFieldWithPawn == null) {
                     //first click
                     square.highlight();
@@ -84,6 +88,7 @@ public class Pawn extends Circle {
                     //second click
                     Pawn movingPawn = (Pawn) board.selectedFieldWithPawn.getChildren().get(1);
                     if (movingPawn.isMoveValid((BoardSquare) field.getChildren().get(0))) {
+
                         //leaving square methods
                         board.selectedFieldWithPawn.getChildren().remove(1);
                         BoardSquare leavingSquare = (BoardSquare) board.selectedFieldWithPawn.getChildren().get(0);
@@ -99,16 +104,27 @@ public class Pawn extends Circle {
                         //board management
                         board.selectedFieldWithPawn = null;
                         move.changeMove();
+
+                        //checking winner
+                        WolfPawn wolfPawn = (WolfPawn) pawns[0];
+                        if (wolfPawn.isWolfWinner()) {
+                            onGameEnd.accept("wolf");
+                        } else if (wolfPawn.isWolfBlocked(pawns)) {
+                            onGameEnd.accept("sheep");
+                        }
                     }
+
                 } else if (square.hasPawn() && board.selectedFieldWithPawn != null &&
                         board.selectedFieldWithPawn.getChildren().get(0).equals(square)) {
                     // pawn change
                     square.blacken();
                     board.selectedFieldWithPawn = null;
                 }
+
             });
         }
     }
+
 
     public boolean isMoveValid(BoardSquare square) {
         return square.getRow() == row - 1 && square.getColumn() == col + 1

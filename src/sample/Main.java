@@ -10,10 +10,10 @@ import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import sample.model.Board;
 import sample.model.Move;
+import java.util.function.Consumer;
 
 
 public class Main extends Application {
-
 
 
     @Override
@@ -28,7 +28,29 @@ public class Main extends Application {
         RadioButton wolfMove = new RadioButton("WOLF");
         Move move = new Move(sheepMove, wolfMove);
         Button uploadButton = new Button("Continue saved game");
-        Board board = Board.createBoard(move);
+        Label gameOverlabel= new Label();
+
+
+        VBox gameOverMenu = new VBox(10);
+        Button restartButton = new Button("Play again");
+
+        gameOverMenu.setAlignment(Pos.CENTER);
+        gameOverMenu.getChildren().addAll(gameOverlabel, restartButton);
+        Scene gameOverScene = new Scene(gameOverMenu, 600, 800);
+
+
+        Consumer<String> onGameEnd = winner -> {
+
+            if (winner.equals("wolf")){
+                gameOverlabel.setText("The winner is wolf");
+                primaryStage.setScene(gameOverScene);
+            } else if (winner.equals("sheep")){
+                gameOverlabel.setText("The winner is sheep");
+                primaryStage.setScene(gameOverScene);
+            }
+
+        };
+        Board board = Board.createBoard(move, onGameEnd);
         board.setAlignment(Pos.BOTTOM_CENTER);
 
         Label moveLabel = new Label("Who's move?");
@@ -37,20 +59,22 @@ public class Main extends Application {
 
 
         gameView.getChildren().addAll(moveLabel, sheepMove, wolfMove, board);
-        Scene scene1 = new Scene(menu, 600, 800);
-        Scene scene = new Scene(gameView, 600, 800);
+        Scene startScene = new Scene(menu, 600, 800);
+        Scene gameScene = new Scene(gameView, 600, 800);
         menu.setAlignment(Pos.CENTER);
         menu.getChildren().addAll(startLabel, startButton, uploadButton);
-        startButton.setOnAction(e->{
-            primaryStage.setScene(scene);
+        startButton.setOnAction(e -> {
+            primaryStage.setScene(gameScene);
+        });
+        // TODO: 01.07.2021 restart button 
+        restartButton.setOnAction(e -> {
+            
         });
         primaryStage.setTitle("Wolf and sheep game");
-        primaryStage.setScene(scene1);
+        primaryStage.setScene(startScene);
         primaryStage.show();
 
     }
-
-
 
 
     public static void main(String[] args) {

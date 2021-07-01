@@ -6,6 +6,10 @@ import javafx.scene.layout.RowConstraints;
 import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
 
+import java.util.function.Consumer;
+import java.util.function.Function;
+import java.util.function.IntConsumer;
+
 public class Board extends GridPane {
 
     public final static int boardHeight = 8;
@@ -16,7 +20,7 @@ public class Board extends GridPane {
     public Board() {
     }
 
-    public static Board createBoard(Move move) {
+    public static Board createBoard(Move move, Consumer<String> onGameEnd) {
         Board board = new Board();
         BoardSquare square;
 
@@ -33,7 +37,7 @@ public class Board extends GridPane {
 
 
                 square = new BoardSquare(column, row, color);
-             Pawn.placePawnsInTheBoard(pawns, square, board, move);
+             Pawn.placePawnsInTheBoard(pawns, square, board, move, onGameEnd);
 
 
             }
