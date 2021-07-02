@@ -8,8 +8,7 @@ import javafx.scene.control.Label;
 import javafx.scene.control.RadioButton;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
-import sample.model.Board;
-import sample.model.Move;
+
 import java.util.function.Consumer;
 
 
@@ -22,9 +21,7 @@ public class Main extends Application {
         VBox menu = new VBox(30);
         Label startLabel = new Label("Welcome to Wolf and sheep game");
         Button startButton = new Button("Start game");
-        // TODO: 30.06.2021 save and upload saved game from the file
-        Button uploadButton = new Button("Continue saved game");
-        Label gameOverlabel= new Label();
+        Label gameOverlabel = new Label();
 
 
         VBox gameOverMenu = new VBox(10);
@@ -36,26 +33,26 @@ public class Main extends Application {
 
 
         Consumer<String> onGameEnd = winner -> {
-            if (winner.equals("wolf")){
+            if (winner.equals("wolf")) {
                 gameOverlabel.setText("The winner is wolf");
                 primaryStage.setScene(gameOverScene);
-            } else if (winner.equals("sheep")){
+            } else if (winner.equals("sheep")) {
                 gameOverlabel.setText("The winner is sheep");
                 primaryStage.setScene(gameOverScene);
             }
         };
         VBox gameView = prepareGameView(onGameEnd);
 
-        Scene startScene = new Scene(menu, 600, 800);
-        Scene gameScene = new Scene(gameView, 600, 800);
+        Scene startScene = new Scene(menu, 800, 800);
+        Scene gameScene = new Scene(gameView, 800, 800);
         menu.setAlignment(Pos.CENTER);
-        menu.getChildren().addAll(startLabel, startButton, uploadButton);
+        menu.getChildren().addAll(startLabel, startButton);
         startButton.setOnAction(e -> {
             primaryStage.setScene(gameScene);
         });
         restartButton.setOnAction(e -> {
             VBox newGameView = prepareGameView(onGameEnd);
-            Scene newGameScene = new Scene(newGameView, 600, 800);
+            Scene newGameScene = new Scene(newGameView, 800, 800);
             primaryStage.setScene(newGameScene);
         });
         primaryStage.setTitle("Wolf and sheep game");
@@ -70,14 +67,17 @@ public class Main extends Application {
         RadioButton wolfMove = new RadioButton("WOLF");
         Move move = new Move(sheepMove, wolfMove);
 
-        Board board = Board.createBoard(move, onGameEnd);
-        board.setAlignment(Pos.BOTTOM_CENTER);
+        Board board = new Board();
+        board.createBoard(move, onGameEnd);
+        board.setAlignment(Pos.CENTER);
 
         Label moveLabel = new Label("Who's move?");
         sheepMove.setDisable(true);
         wolfMove.setDisable(true);
-
-        gameView.getChildren().addAll(moveLabel, sheepMove, wolfMove, board);
+        VBox whoIsMoveMenu = new VBox(5);
+        whoIsMoveMenu.getChildren().addAll(moveLabel, sheepMove, wolfMove);
+        whoIsMoveMenu.setAlignment(Pos.BASELINE_CENTER);
+        gameView.getChildren().addAll(whoIsMoveMenu, board);
 
         return gameView;
     }
